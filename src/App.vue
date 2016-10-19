@@ -39,8 +39,8 @@
                     <th>Username/Email</th>
                     <th>Notes</th>
                     <th>Password</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th v-show="!editing">Edit</th>
+                    <th v-show="!editing">Delete</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -48,30 +48,33 @@
                   <th></th>
                   <th></th>
                   <th></th>
-                  <th></th>
-                  <th></th>
+                  <th v-show="!editing"></th>
+                  <th v-show="!editing"></th>
                 </tfoot>
                 <tbody>
 
                   <tr
                     v-for="(account, index) in filteredAccounts"
                     :key="index"
-                    :class="{editing: account.editingMode}"
                   >
                     <td>{{account.name}}</td>
                     <td>{{account.usernameEmail}}</td>
                     <td>{{account.notes}}</td>
-                    <td>******{{account.password.slice(-1)}}</td>
+                    <td>****{{account.password.slice(-1)}}</td>
                     <td class="is-icon">
                       <a
-                        @click.prevent="editAccount(account, index, account.editingMode = true)"
+                        @click.prevent="editAccount(account, index, visibility = 'edit', account.editingMode = true )"
+                        v-show="!account.editingMode"
                         href="#"
                       >
                         <i class="fa fa-edit"></i>
                       </a>
                     </td>
                     <td class="is-icon">
-                      <a @click.prevent="removeAccount(index)" href="#">
+                      <a
+                        @click.prevent="removeAccount(account)" href="#"
+                        v-show="!account.editingMode"
+                      >
                         <i class="fa fa-remove"></i>
                       </a>
                     </td>
@@ -114,7 +117,7 @@
                   <input
                     autocomplete="off"
                     class="input"
-                    type="password"
+                    type="text"
                     required
                     placeholder="Password"
                     v-model="newAccount.password"
@@ -143,14 +146,9 @@ const filters = {
   all (accounts) {
     return accounts
   },
-  active (accounts) {
+  edit (accounts) {
     return accounts.filter(function (account) {
-      return !account.completed
-    })
-  },
-  editing (accounts) {
-    return accounts.filter(function (account) {
-      return account.editing
+      return account.editingMode
     })
   }
 }
@@ -162,7 +160,7 @@ export default {
       accounts: [],
       newAccount: {
         id: null,
-        editingMode: null,
+        editingMode: false,
         name: '',
         usernameEmail: '',
         password: '',
@@ -206,8 +204,8 @@ export default {
       this.newAccount = {}
     },
 
-    removeAccount (index) {
-      this.accounts.splice(this.accounts.indexOf(index), 1)
+    removeAccount (account) {
+      this.accounts.splice(this.accounts.indexOf(account), 1)
     },
 
     editAccount (account, index) {
@@ -235,10 +233,12 @@ export default {
       this.newAccount.editingMode = false
       this.accounts[this.newAccount.id] = this.newAccount
       this.editing = false
+      this.visibility = 'all'
       this.newAccount = {}
     }
   }
 }
+
 </script>
 
 <style lang="stylus">

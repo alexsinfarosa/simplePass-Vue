@@ -6,7 +6,7 @@
 
         <!-- Header -->
         <div class="columns">
-          <div class="column is-8 is-offset-2">
+          <div class="column is-6 is-offset-3">
             <h1 class="title simple-pass">
                 <strong>Simple</strong>
                 <span class="pass">Pass</span>
@@ -18,7 +18,7 @@
 
         <div class="columns" v-if="!loggedIn">
           <div class="column is-8 is-offset-2">
-            <button v-on:click="getLoggedIn" class="button is-success" type="button">LOG IN</button>
+            <button v-on:click="getLoggedIn" class="button is-success is-large" type="button">LOG IN</button>
           </div>
         </div>
 
@@ -44,7 +44,7 @@
                   </tr>
                 </thead>
                 <tfoot>
-                  <th>Tot. {{accounts.length}}</th>
+                  <th v-show="accounts.length">Tot. {{accounts.length}}</th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -54,8 +54,7 @@
                 <tbody>
 
                   <tr
-                    v-for="(account, index) in filteredAccounts"
-                    :key="index"
+                    v-for="account in accounts" :key="account['.key']"
                   >
                     <td>{{account.name}}</td>
                     <td>{{account.usernameEmail}}</td>
@@ -63,7 +62,7 @@
                     <td>****{{account.password.slice(-1)}}</td>
                     <td class="is-icon">
                       <a
-                        @click.prevent="editAccount(account, index, visibility = 'edit', account.editingMode = true )"
+                        @click.prevent="editAccount(account)"
                         v-show="!account.editingMode"
                         href="#"
                       >
@@ -142,14 +141,14 @@
 </template>
 
 <script>
+import { db } from './fireconfig'
+
 const filters = {
   all (accounts) {
     return accounts
   },
   edit (accounts) {
-    return accounts.filter(function (account) {
-      return account.editingMode
-    })
+    return accounts.filter(account => account.editingMode)
   }
 }
 
@@ -157,25 +156,29 @@ export default {
   name: 'app',
   data () {
     return {
-      accounts: [],
       newAccount: {
-        id: null,
-        editingMode: false,
         name: '',
         usernameEmail: '',
         password: '',
-        notes: ''
+        notes: '',
+        editingMode: false
       },
       editing: false,
       visibility: 'all',
       loggedIn: false
     }
   },
+
+  firebase: {
+    accounts: db.ref('accounts')
+  },
+
   computed: {
     filteredAccounts () {
       return filters[this.visibility](this.accounts)
     }
   },
+
   methods: {
     getLoggedIn () {
       this.loggedIn = true
@@ -193,13 +196,12 @@ export default {
       if (!(name && usernameEmail && password)) {
         return
       }
-      this.accounts.push({
-        id: null,
-        editingMode: false,
+      this.$firebaseRefs.accounts.push({
         name: name,
         usernameEmail: usernameEmail,
         password: password,
-        notes: notes
+        notes: notes,
+        editingMode: false
       })
       this.newAccount = {}
     },

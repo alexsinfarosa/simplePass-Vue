@@ -54,7 +54,7 @@
                 <tbody>
 
                   <tr
-                    v-for="account in accounts" :key="account['.key']"
+                    v-for="account in filteredAccounts" :key="account['.key']"
                   >
                     <td>{{account.name}}</td>
                     <td>{{account.usernameEmail}}</td>
@@ -207,13 +207,17 @@ export default {
     },
 
     removeAccount (account) {
-      this.accounts.splice(this.accounts.indexOf(account), 1)
+      this.$firebaseRefs.accounts.child(account['.key']).remove()
     },
 
-    editAccount (account, index) {
-      this.editing = true
+    editAccount (account) {
       this.newAccount = account
-      const id = index
+      this.newAccount.editingMode = true
+      this.visibility = 'edit'
+      this.editing = true
+    },
+
+    updateAccount (account) {
       const name = this.newAccount.name && this.newAccount.name.trim()
       const usernameEmail = this.newAccount.usernameEmail && this.newAccount.usernameEmail.trim()
       const password = this.newAccount.password && this.newAccount.password.trim()
@@ -221,19 +225,13 @@ export default {
       if (!(name && usernameEmail && password)) {
         return
       }
-      this.newAccount = {
-        id: id,
-        editingMode: true,
+      this.$firebaseRefs.accounts.child(this.newAccount['.key']).set({
+        editingMode: false,
         name: name,
         usernameEmail: usernameEmail,
         password: password,
         notes: notes
-      }
-    },
-
-    updateAccount () {
-      this.newAccount.editingMode = false
-      this.accounts[this.newAccount.id] = this.newAccount
+      })
       this.editing = false
       this.visibility = 'all'
       this.newAccount = {}

@@ -6,9 +6,9 @@ Vue.use(VueFire)
 
 // Setup Firebase
 const config = {
-  apiKey: 'AIzaSyAi_yuJciPXLFr_PYPeU3eTvtXf8jbJ8zw',
-  authDomain: 'vue-demo-537e6.firebaseapp.com',
-  databaseURL: 'https://vue-demo-537e6.firebaseio.com'
+  apiKey: 'AIzaSyAtHrs0mochY_LMHxs2IHxvBM2FtUy81-0',
+  authDomain: 'simplepass-xscanna.firebaseapp.com',
+  databaseURL: 'https://simplepass-xscanna.firebaseio.com'
 }
 
 const firebaseApp = Firebase.initializeApp(config)

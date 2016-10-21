@@ -10,7 +10,7 @@
             <h1 class="title simple-pass">
                 <strong>Simple</strong>
                 <span class="pass">Pass</span>
-              </h1>
+            </h1>
             <hr/>
             <br/>
           </div>
@@ -39,8 +39,8 @@
                     <th>Username/Email</th>
                     <th>Notes</th>
                     <th>Password</th>
-                    <th v-show="!editing">Edit</th>
-                    <th v-show="!editing">Delete</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -48,8 +48,8 @@
                   <th></th>
                   <th></th>
                   <th></th>
-                  <th v-show="!editing"></th>
-                  <th v-show="!editing"></th>
+                  <th></th>
+                  <th></th>
                 </tfoot>
                 <tbody>
 
@@ -63,7 +63,7 @@
                     <td class="is-icon">
                       <a
                         @click.prevent="editAccount(account)"
-                        v-show="!account.editingMode"
+
                         href="#"
                       >
                         <i class="fa fa-edit"></i>
@@ -71,8 +71,8 @@
                     </td>
                     <td class="is-icon">
                       <a
-                        @click.prevent="removeAccount(account)" href="#"
-                        v-show="!account.editingMode"
+                        @click.prevent="removeAccount(account)"
+                        href="#"
                       >
                         <i class="fa fa-remove"></i>
                       </a>
@@ -86,11 +86,12 @@
 
           <div class="columns">
             <div class="column is-8 is-offset-2">
-              <form v-on:submit.prevent="editing ? updateAccount() : addAccount()">
+              <form v-on:submit.prevent="newAccount.editing ? updateAccount() : addAccount()">
                 <div class="control is-horizontal">
                   <input
                     autofocus autocomplete="off"
                     class="input"
+                    :class="{selected: newAccount.editing}"
                     type="text"
                     required
                     placeholder="Name"
@@ -100,6 +101,7 @@
                   <input
                     autocomplete="off"
                     class="input"
+                    :class="{selected: newAccount.editing}"
                     type="text"
                     required
                     placeholder="Username/Email"
@@ -108,6 +110,7 @@
 
                   <input
                     class="input"
+                    :class="{selected: newAccount.editing}"
                     type="text"
                     placeholder="Notes"
                     v-model="newAccount.notes"
@@ -116,6 +119,7 @@
                   <input
                     autocomplete="off"
                     class="input"
+                    :class="{selected: newAccount.editing}"
                     type="text"
                     required
                     placeholder="Password"
@@ -124,7 +128,7 @@
 
                   <p className="control">
                     <button type="submit" class="button is-outlined is-success">
-                      {{editing ? 'UPDATE' : 'CREATE'}}
+                      {{newAccount.editing ? 'UPDATE' : 'CREATE'}}
                     </button>
                   </p>
                 </div>
@@ -148,7 +152,7 @@ const filters = {
     return accounts
   },
   edit (accounts) {
-    return accounts.filter(account => account.editingMode)
+    return accounts.filter(account => account.editing === true)
   }
 }
 
@@ -161,9 +165,8 @@ export default {
         usernameEmail: '',
         password: '',
         notes: '',
-        editingMode: false
+        editing: false
       },
-      editing: false,
       visibility: 'all',
       loggedIn: false
     }
@@ -201,7 +204,7 @@ export default {
         usernameEmail: usernameEmail,
         password: password,
         notes: notes,
-        editingMode: false
+        editing: false
       })
       this.newAccount = {}
     },
@@ -212,9 +215,8 @@ export default {
 
     editAccount (account) {
       this.newAccount = account
-      this.newAccount.editingMode = true
+      this.newAccount.editing = true
       this.visibility = 'edit'
-      this.editing = true
     },
 
     updateAccount (account) {
@@ -226,13 +228,12 @@ export default {
         return
       }
       this.$firebaseRefs.accounts.child(this.newAccount['.key']).set({
-        editingMode: false,
+        editing: false,
         name: name,
         usernameEmail: usernameEmail,
         password: password,
         notes: notes
       })
-      this.editing = false
       this.visibility = 'all'
       this.newAccount = {}
     }
@@ -253,5 +254,8 @@ export default {
   color #ff3860
 
 .editing
-  background-color rgba(yellow,.1);
+  background-color rgba(yellow,.1)
+
+.selected
+  background-color rgba(#FCDCB1,.5)
 </style>

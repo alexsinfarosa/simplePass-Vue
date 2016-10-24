@@ -63,7 +63,7 @@
                     <td class="is-icon">
                       <a
                         @click.prevent="editAccount(account)"
-
+                        v-show="!account.editing"
                         href="#"
                       >
                         <i class="fa fa-edit"></i>
@@ -72,6 +72,7 @@
                     <td class="is-icon">
                       <a
                         @click.prevent="removeAccount(account)"
+                        v-show="!account.editing"
                         href="#"
                       >
                         <i class="fa fa-remove"></i>

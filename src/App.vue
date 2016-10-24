@@ -5,16 +5,22 @@
       <div class="container has-text-centered">
 
         <!-- Header -->
-        <div class="columns">
+        <div class="columns animated">
           <div class="column is-6 is-offset-3">
-            <h1 class="title simple-pass">
-                <strong>Simple</strong>
-                <span class="pass">Pass</span>
-            </h1>
-            <hr/>
-            <br/>
+            <transition appear
+              name="ciccio"
+              enter-active-class="animated bounceInLeft"
+              leave-active-class="animated bounceOutRight"
+            >
+              <h1 class="title simple-pass">
+                  <strong>Simple</strong>
+                  <span class="pass">Pass</span>
+              </h1>
+            </transition>
+              <hr/>
+              <br/>
+            </div>
           </div>
-        </div>
 
         <div class="columns" v-if="!loggedIn">
           <div class="column is-8 is-offset-2">
@@ -111,7 +117,7 @@
 
                   <input
                     class="input"
-                    :class="{selected: newAccount.editing}"
+                    :class="{selected: true ? newAccount.editing : ''}"
                     type="text"
                     placeholder="Notes"
                     v-model="newAccount.notes"
@@ -166,7 +172,8 @@ export default {
         usernameEmail: '',
         password: '',
         notes: '',
-        editing: false
+        editing: false,
+        show: false
       },
       visibility: 'all',
       loggedIn: false
@@ -204,7 +211,7 @@ export default {
         name: name,
         usernameEmail: usernameEmail,
         password: password,
-        notes: notes,
+        notes: notes || null,
         editing: false
       })
       this.newAccount = {}
@@ -233,7 +240,7 @@ export default {
         name: name,
         usernameEmail: usernameEmail,
         password: password,
-        notes: notes
+        notes: notes || null
       })
       this.visibility = 'all'
       this.newAccount = {}

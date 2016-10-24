@@ -7,10 +7,16 @@
         <!-- Header -->
         <div class="columns">
           <div class="column is-6 is-offset-3">
-            <h1 class="title simple-pass">
-                <strong>Simple</strong>
-                <span class="pass">Pass</span>
-            </h1>
+            <transition
+              appear
+              name="t-title"
+              enter-active-class="animated baunceInLeft"
+            >
+              <h1 class="title simple-pass">
+                  <strong>Simple</strong>
+                  <span class="pass">Pass</span>
+              </h1>
+            </transition>
             <hr/>
             <br/>
           </div>

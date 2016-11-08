@@ -15,7 +15,7 @@
             >
               <h1 class="title simple-pass">
                   <strong>Simple</strong>
-                  <span class="pass">Pass</span>
+                  <span class="pass">Password</span>
               </h1>
             </transition>
             <hr/>

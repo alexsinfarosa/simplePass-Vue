@@ -11,7 +11,6 @@
             <transition
               appear
               name="ciccio"
-              enter-active-class="animated bounceInLeft"
             >
               <h1 class="title simple-pass">
                   <strong>Simple</strong>

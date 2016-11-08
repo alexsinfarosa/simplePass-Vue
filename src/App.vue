@@ -25,7 +25,7 @@
 
         <div class="columns" v-if="!loggedIn">
           <div class="column is-8 is-offset-2">
-            <button v-on:click="getLoggedIn" class="button is-success is-large" type="button">LOG IN</button>
+            <button v-on:click="oAuthLogIn" class="button is-success is-large" type="button">LOG IN</button>
           </div>
         </div>
 
@@ -33,7 +33,7 @@
 
           <div class="columns">
             <div class="column is-8 is-offset-2">
-              <button v-on:click="getLoggedOut" class="button is-primary" type="button">LOG OUT</button>
+              <button v-on:click="logOut" class="button is-primary" type="button">LOG OUT</button>
             </div>
           </div>
 
@@ -153,6 +153,7 @@
 </template>
 
 <script>
+import Firebase from 'firebase'
 import { db } from './fireconfig'
 
 const filters = {
@@ -192,12 +193,43 @@ export default {
   },
 
   methods: {
-    getLoggedIn () {
-      this.loggedIn = true
+    oAuthLogIn () {
+      const that = this
+      var provider = new Firebase.auth.GithubAuthProvider()
+      Firebase.auth().signInWithPopup(provider).then(function (result) {
+        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+        var token = result.credential.accessToken
+        console.log(`token:${token}`)
+        // The signed-in user info.
+        var user = result.user
+        console.log(user.displayName)
+        that.loggedIn = true
+      }).catch(function (error) {
+        console.log('You are signed in')
+        // Handle Errors here.
+        var errorCode = error.code
+        console.log(errorCode)
+        var errorMessage = error.message
+        console.log(errorMessage)
+        // The email of the user's account used.
+        var email = error.email
+        console.log(email)
+        // The Firebase.auth.AuthCredential type that was used.
+        var credential = error.credential
+        console.log(credential)
+        that.loggedIn = false
+      })
     },
 
-    getLoggedOut () {
-      this.loggedIn = false
+    logOut () {
+      const that = this
+      that.loggedIn = false
+      Firebase.auth().signOut().then(function () {
+        console.log('Signed Out')
+      }, function (error) {
+        that.loggedIn = true
+        console.error('Sign Out Error', error)
+      })
     },
 
     addAccount () {

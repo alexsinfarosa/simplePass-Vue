@@ -32,7 +32,12 @@
 
           <div class="columns">
             <div class="column is-8 is-offset-2">
-              <button v-on:click="logOut" class="button is-primary" type="button">LOG OUT</button>
+              <button
+                v-on:click="if(Object.keys(newAccount).length === 0) return logOut()"
+                class="button is-primary"
+                type="button">
+                  LOG OUT
+              </button>
             </div>
           </div>
 
@@ -96,7 +101,8 @@
               <form v-on:submit.prevent="newAccount.editing ? updateAccount() : addAccount()">
                 <div class="control is-horizontal">
                   <input
-                    autofocus autocomplete="off"
+                    autofocus
+                    autocomplete="off"
                     class="input"
                     :class="{selected: newAccount.editing}"
                     type="text"
@@ -134,8 +140,10 @@
                   />
 
                   <p className="control">
-                    <button type="submit" class="button is-outlined is-success">
-                      {{newAccount.editing ? 'UPDATE' : 'CREATE'}}
+                    <button
+                      type="submit"
+                      class="button is-outlined is-success">
+                        {{newAccount.editing ? 'UPDATE' : 'CREATE'}}
                     </button>
                   </p>
                 </div>
@@ -168,16 +176,10 @@ export default {
   name: 'app',
   data () {
     return {
-      newAccount: {
-        name: '',
-        usernameEmail: '',
-        password: '',
-        notes: '',
-        editing: false,
-        show: false
-      },
+      newAccount: {},
       visibility: 'all',
-      loggedIn: false
+      loggedIn: false,
+      focused: false
     }
   },
 

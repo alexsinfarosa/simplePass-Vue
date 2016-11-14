@@ -201,7 +201,7 @@ export default {
         console.log(`token:${token}`)
         // The signed-in user info.
         var user = result.user
-        console.log(user.displayName)
+        console.log(`user:${user.displayName}`)
         that.loggedIn = true
       }).catch(function (error) {
         console.log('You are signed in')
@@ -274,6 +274,7 @@ export default {
         password: password,
         notes: notes || null
       })
+      this.newAccount.editing = false
       this.visibility = 'all'
       this.newAccount = {}
     }

@@ -4,23 +4,7 @@
     <div class="hero-body">
       <div class="container has-text-centered">
 
-        <!-- Header -->
-        <div class="columns animated">
-          <div class="column is-6 is-offset-3">
-
-            <transition
-              appear
-              name="ciccio"
-            >
-              <h1 class="title simple-pass">
-                  <strong>Simple</strong>
-                  <span class="pass">Pass</span>
-              </h1>
-            </transition>
-            <hr/>
-            <br/>
-          </div>
-        </div>
+        <login></login>
 
         <div class="columns" v-if="!loggedIn">
           <div class="column is-8 is-offset-2">
@@ -162,6 +146,7 @@
 <script>
 import Firebase from 'firebase'
 import { db } from './fireconfig'
+import Login from './components/Login'
 
 const filters = {
   all (accounts) {
@@ -174,6 +159,9 @@ const filters = {
 
 export default {
   name: 'app',
+  components: {
+    Login
+  },
   data () {
     return {
       newAccount: {},
@@ -290,15 +278,12 @@ export default {
   display: none;
 }
 
-.simple-pass
-  font-size 50px
-
-.pass
-  color #ff3860
-
 .editing
   background-color rgba(yellow,.1)
 
 .selected
   background-color rgba(#FCDCB1,.5)
+
+.border
+  border: 1px solid black
 </style>

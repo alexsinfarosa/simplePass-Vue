@@ -5,7 +5,7 @@
       <div class="container has-text-centered">
 
         <!-- Header -->
-        <div class="columns animated">
+        <div class="columns">
           <div class="column is-6 is-offset-3">
 
             <transition

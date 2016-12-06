@@ -12,4 +12,6 @@ const config = {
 }
 
 const firebaseApp = Firebase.initializeApp(config)
-export const db = firebaseApp.database()
+const db = firebaseApp.database()
+
+export const accountsRef = db.ref('accounts')
